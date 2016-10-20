@@ -12,10 +12,10 @@
   },
   "Tasks": [
     "interpolate-source",
-    "default"
+    "default",
+    "rmbin"
   ],
   "TasksExclude": [
-    "rmbin",
     "deb",
     "deb-dev",
     "downloads-page",
