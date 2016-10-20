@@ -9,7 +9,7 @@ import (
 var signupVerifyToken string
 var signupVerifyMail string
 
-var signupVerifyHandle = func(cmd *cobra.Command, args []string) {
+var signupVerifyHandler = func(cmd *cobra.Command, args []string) {
 	if signupVerifyToken == "" {
 		fail(`Missing token. Use "--token" or see "--help"`)
 	}
@@ -28,7 +28,7 @@ var signupVerifyHandle = func(cmd *cobra.Command, args []string) {
 var signupVerifyCmd = &cobra.Command{
 	Use:   "verify",
 	Short: "Verify a new clinot.es account",
-	Run:   signupVerifyHandle,
+	Run:   signupVerifyHandler,
 }
 
 func init() {

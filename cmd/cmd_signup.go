@@ -8,7 +8,7 @@ import (
 
 var signupMail string
 
-var signupHandle = func(cmd *cobra.Command, args []string) {
+var signupHandler = func(cmd *cobra.Command, args []string) {
 	if signupMail == "" {
 		fail(`Missing email address. Use "--mail" or see "--help"`)
 	}
@@ -23,7 +23,7 @@ var signupHandle = func(cmd *cobra.Command, args []string) {
 var signupCmd = &cobra.Command{
 	Use:   "signup",
 	Short: "Sign up for a clinot.es account",
-	Run:   signupHandle,
+	Run:   signupHandler,
 }
 
 func init() {

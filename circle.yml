@@ -1,0 +1,9 @@
+machine:
+  services:
+    - docker
+    
+deployment:
+  s3:
+    branch: master
+    commands:
+      - make publish

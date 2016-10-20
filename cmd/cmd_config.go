@@ -6,22 +6,24 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var configHandler = func(cmd *cobra.Command, args []string) {
+	if APIHostname != "" {
+		fmt.Println("CLINOTES_API_HOSTNAME: " + APIHostname)
+	}
+
+	if APIUsername != "" {
+		fmt.Println("CLINOTES_API_USERNAME: " + APIUsername)
+	}
+
+	if APIToken != "" {
+		fmt.Println("CLINOTES_API_TOKEN: " + APIToken)
+	}
+}
+
 var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "Show clinot.es client configuration",
-	Run: func(cmd *cobra.Command, args []string) {
-		if APIHostname != "" {
-			fmt.Println("CLINOTES_API_HOSTNAME: " + APIHostname)
-		}
-
-		if APIUsername != "" {
-			fmt.Println("CLINOTES_API_USERNAME: " + APIUsername)
-		}
-
-		if APIToken != "" {
-			fmt.Println("CLINOTES_API_TOKEN: " + APIToken)
-		}
-	},
+	Run:   configHandler,
 }
 
 func init() {

@@ -6,37 +6,33 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var authRequest bool
 var authToken string
+var authMail string
 
-var authHandle = func(cmd *cobra.Command, args []string) {
-	if !authRequest && authToken == "" {
-		fail(`Use either "--request" or "--token" for auth command. See "--help" for more`)
+var authHandler = func(cmd *cobra.Command, args []string) {
+	if authToken == "" {
+		fail(`Missing token. Use "--token" or see "--help"`)
 	}
 
-	if authRequest {
-		if _, err := postToAPI("/auth/token/create", `{"address":"`+APIUsername+`"}`); err == nil {
-			fmt.Println("Requested a token for " + APIUsername + "! Please check your mails for your token …")
-		} else {
-			fail("Failed to request token.")
-		}
+	if authMail == "" {
+		fail(`Missing email address. Use "--mail" or see "--help"`)
+	}
+
+	if _, err := postToAPI("/auth/token/create", `{"address":"`+APIUsername+`"}`); err == nil {
+		fmt.Println("Requested a token for " + APIUsername + "! Please check your mails for your token …")
 	} else {
-		if _, err := postToAPI("/auth", `{"address":"`+APIUsername+`", "token": "`+authToken+`"}`); err == nil {
-			fmt.Println("Authenticated with valid token for " + APIUsername + "!")
-		} else {
-			fail("Failed to authorize account.")
-		}
+		fail("Failed to request token.")
 	}
 }
 
 var authCmd = &cobra.Command{
 	Use:   "auth",
 	Short: "Authorize clinot.es client",
-	Run:   authHandle,
+	Run:   authHandler,
 }
 
 func init() {
-	authCmd.Flags().BoolVar(&authRequest, "request", false, "request a new auth token")
+	authCmd.Flags().StringVar(&authMail, "mail", "", "mail address")
 	authCmd.Flags().StringVar(&authToken, "token", "", "pass a valid auth token")
 
 	RootCmd.AddCommand(authCmd)
