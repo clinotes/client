@@ -1,4 +1,4 @@
-# CLInotes client [![CircleCI](https://img.shields.io/circleci/project/clinotes/client.svg)]() [![GitHub release](https://img.shields.io/github/release/clinotes/client.svg)]() [![license](https://img.shields.io/github/license/clinotes/client.svg)]()
+# CLInotes client [![CircleCI](https://img.shields.io/circleci/project/clinotes/client.svg)](https://circleci.com/gh/clinotes/client/) [![GitHub release](https://img.shields.io/github/release/clinotes/client.svg)](https://github.com/clinotes/client/releases) [![license](https://img.shields.io/github/license/clinotes/client.svg)](https://github.com/clinotes/client/blob/master/LICENSE.md)
 
 Use the [CLInotes](https://clinot.es) client application `cn` to create notes from the command line. Per default the command line interface uses the API hosted at [`https://api.clinot.es`](https://api.clinot.es) but you can configure a custom API endpoint within the `~/.clinotes.yaml` configuration file.
 
