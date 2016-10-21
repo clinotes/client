@@ -13,8 +13,8 @@ var authRequestHandler = func(cmd *cobra.Command, args []string) {
 		fail(`Missing email address. Use "--mail" or see "--help"`)
 	}
 
-	if _, err := postToAPI("/auth/token/create", `{"address":"`+APIUsername+`"}`); err == nil {
-		fmt.Println("Requested a token for " + APIUsername + "! Please check your mails for your token …")
+	if _, err := postToAPI("/auth/token/create", `{"address":"`+authRequestMail+`"}`); err == nil {
+		fmt.Println("Requested a token for " + authRequestMail + "! Please check your mails for your token …")
 	} else {
 		fail("Failed to request token.")
 	}

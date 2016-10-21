@@ -21,12 +21,15 @@ var (
 	APIUsername string
 	// APIToken is the username for the API
 	APIToken string
+	// FallbackHostname is used if no custom hostname
+	FallbackHostname = "https://api.clinot.es"
 )
 
 // APIErrorResponse stores information from the API
 type APIErrorResponse struct {
 	Error   bool   `json:"error"`
 	Message string `json:"message"`
+	Done    bool   `json:"done"`
 }
 
 // RootCmd represents the base command when called without any subcommands
@@ -41,7 +44,14 @@ func fail(format string, a ...interface{}) {
 }
 
 func postToAPI(action string, jsonString string) (*APIErrorResponse, error) {
-	req, err := http.NewRequest("POST", APIHostname+action, bytes.NewBuffer([]byte(jsonString)))
+	var hostname string
+	if APIHostname != "" {
+		hostname = APIHostname
+	} else {
+		hostname = FallbackHostname
+	}
+
+	req, err := http.NewRequest("POST", hostname+action, bytes.NewBuffer([]byte(jsonString)))
 	client := &http.Client{}
 	resp, err := client.Do(req)
 
