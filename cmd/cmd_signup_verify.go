@@ -9,6 +9,11 @@ import (
 var signupVerifyToken string
 var signupVerifyMail string
 
+type jsonDataSignupVerify struct {
+	Address string
+	Token   string
+}
+
 var signupVerifyHandler = func(cmd *cobra.Command, args []string) {
 	if signupVerifyToken == "" {
 		fail(`Missing token. Use "--token" or see "--help"`)
@@ -18,7 +23,8 @@ var signupVerifyHandler = func(cmd *cobra.Command, args []string) {
 		fail(`Missing email address. Use "--mail" or see "--help"`)
 	}
 
-	if _, err := postToAPI("/auth/user/verify", `{"address":"`+signupVerifyMail+`", "token": "`+signupVerifyToken+`"}`); err == nil {
+	jsonData := jsonDataSignupVerify{signupVerifyMail, signupVerifyToken}
+	if _, err := newRequest("/auth/user/verify").post(jsonData); err == nil {
 		fmt.Println("Verified account for " + signupVerifyMail + "!")
 	} else {
 		fail("Failed to verify account.")

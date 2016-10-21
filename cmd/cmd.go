@@ -1,11 +1,7 @@
 package cmd
 
 import (
-	"bytes"
-	"encoding/json"
-	"errors"
 	"fmt"
-	"net/http"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -17,8 +13,8 @@ var (
 	VERSION string
 	// APIHostname is the hostname for the API
 	APIHostname string
-	// APIUsername is the username for the API
-	APIUsername string
+	// APIAddress is the username for the API
+	APIAddress string
 	// APIToken is the username for the API
 	APIToken string
 	// FallbackHostname is used if no custom hostname
@@ -38,41 +34,15 @@ var RootCmd = &cobra.Command{
 	Short: "Access clinot.es from the command line",
 }
 
+func ensureCredentials() {
+	if APIAddress == "" || APIToken == "" {
+		fail("No credentials found!\n\nSee `cn --help` or visit https://clinot.es to read more …")
+	}
+}
+
 func fail(format string, a ...interface{}) {
 	fmt.Fprintf(os.Stderr, "error: "+format+"\n", a...)
 	os.Exit(1)
-}
-
-func postToAPI(action string, jsonString string) (*APIErrorResponse, error) {
-	var hostname string
-	if APIHostname != "" {
-		hostname = APIHostname
-	} else {
-		hostname = FallbackHostname
-	}
-
-	req, err := http.NewRequest("POST", hostname+action, bytes.NewBuffer([]byte(jsonString)))
-	client := &http.Client{}
-	resp, err := client.Do(req)
-
-	if err != nil {
-		return nil, errors.New("Failed to send request")
-	}
-
-	if resp.StatusCode != 200 {
-		return nil, errors.New("Received HTTP error code")
-	}
-
-	var data APIErrorResponse
-	decoder := json.NewDecoder(resp.Body)
-	err = decoder.Decode(&data)
-	defer resp.Body.Close()
-
-	if err != nil {
-		return nil, errors.New("Failed to parse response")
-	}
-
-	return &data, nil
 }
 
 // Execute adds all child commands to the root command
@@ -97,6 +67,6 @@ func initConfig() {
 	viper.ReadInConfig()
 
 	APIHostname = viper.GetString("CLINOTES_API_HOSTNAME")
-	APIUsername = viper.GetString("CLINOTES_API_USERNAME")
+	APIAddress = viper.GetString("CLINOTES_API_USERNAME")
 	APIToken = viper.GetString("CLINOTES_API_TOKEN")
 }

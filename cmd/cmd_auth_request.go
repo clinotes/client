@@ -8,12 +8,17 @@ import (
 
 var authRequestMail string
 
+type jsonDataAuthRequest struct {
+	Address string
+}
+
 var authRequestHandler = func(cmd *cobra.Command, args []string) {
 	if authRequestMail == "" {
 		fail(`Missing email address. Use "--mail" or see "--help"`)
 	}
 
-	if _, err := postToAPI("/auth/token/create", `{"address":"`+authRequestMail+`"}`); err == nil {
+	jsonData := jsonDataAuthRequest{authRequestMail}
+	if _, err := newRequest("/auth/token/create").post(jsonData); err == nil {
 		fmt.Println("Requested a token for " + authRequestMail + "! Please check your mails for your token …")
 	} else {
 		fail("Failed to request token.")

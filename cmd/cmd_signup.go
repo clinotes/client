@@ -8,12 +8,17 @@ import (
 
 var signupMail string
 
+type jsonDataSignup struct {
+	Address string
+}
+
 var signupHandler = func(cmd *cobra.Command, args []string) {
 	if signupMail == "" {
 		fail(`Missing email address. Use "--mail" or see "--help"`)
 	}
 
-	if _, err := postToAPI("/auth/user/create", `{"address":"`+signupMail+`"}`); err == nil {
+	jsonData := jsonDataSignup{signupMail}
+	if _, err := newRequest("/auth/user/create").post(jsonData); err == nil {
 		fmt.Println("Created an account for " + signupMail + "! Please check your mails to verify your account …")
 	} else {
 		fail("Failed to create account.")

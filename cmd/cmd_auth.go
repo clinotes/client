@@ -11,53 +11,62 @@ import (
 var authToken string
 var authMail string
 
+type jsonDataAuth struct {
+	Address string
+	Token   string
+}
+
 var authHandler = func(cmd *cobra.Command, args []string) {
-	var fromParameter bool
-	var token, address string
+	var jsonData jsonDataAuth
 
 	if authToken != "" || authMail != "" {
-		fromParameter = true
-
+		// Show error if no token is set
 		if authToken == "" {
 			fail(`Missing token. Use "--token" or see "--help"`)
 		}
 
+		// Show error if no mail address is set
 		if authMail == "" {
 			fail(`Missing email address. Use "--mail" or see "--help"`)
 		}
 
-		token = authToken
-		address = authMail
+		jsonData = jsonDataAuth{authMail, authToken}
 	} else {
-		fromParameter = false
-
-		if APIUsername != "" && APIToken != "" {
+		// Use data from ~/.clinotes.yaml if available or raise error
+		if APIAddress != "" && APIToken != "" {
 			fmt.Println("Using credentials from ~/.clinotes.yaml …")
 
-			token = APIToken
-			address = APIUsername
+			jsonData = jsonDataAuth{APIAddress, APIToken}
+		} else {
+			fail("Credentials in ~/.clinotes.yaml not valid")
 		}
 	}
 
-	if _, err := postToAPI("/auth", `{"address":"`+address+`", "token": "`+token+`"}`); err == nil {
-		fmt.Println("Token is valid for " + address + "!")
+	if _, err := newRequest("/auth").post(jsonData); err == nil {
+		fmt.Println("Token is valid for " + jsonData.Address + "!")
 
-		if fromParameter {
-			config := []byte(fmt.Sprintf("CLINOTES_API_USERNAME: %s\nCLINOTES_API_TOKEN: %s", address, token))
+		// Prepare configuration content
+		config := []byte(fmt.Sprintf(
+			"CLINOTES_API_USERNAME: %s\nCLINOTES_API_TOKEN: %s",
+			jsonData.Address,
+			jsonData.Token,
+		))
 
-			usr, err := user.Current()
-			if err != nil {
-				fail(`Could not access home directory!`)
-			}
-
-			err = ioutil.WriteFile(usr.HomeDir+"/.clinotes.yaml", config, 0644)
-			if err != nil {
-				fmt.Println(err)
-				fail(`Failed to store credentials in ~/.clinotes.yaml`)
-			}
-
-			fmt.Println("Stored credentials in ~/.clinotes.yaml")
+		// Get current system user
+		usr, err := user.Current()
+		if err != nil {
+			fail(`Could not access home directory!`)
 		}
+
+		// Write data in $HOME/.clinotes.yaml
+		err = ioutil.WriteFile(usr.HomeDir+"/.clinotes.yaml", config, 0644)
+		if err != nil {
+			fmt.Println(err)
+			fail(`Failed to store credentials in ~/.clinotes.yaml`)
+		}
+
+		// Done
+		fmt.Println("Stored credentials in ~/.clinotes.yaml")
 	} else {
 		fail("Failed to authorize token.")
 	}

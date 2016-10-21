@@ -11,8 +11,8 @@ var configHandler = func(cmd *cobra.Command, args []string) {
 		fmt.Println("CLINOTES_API_HOSTNAME: " + APIHostname)
 	}
 
-	if APIUsername != "" {
-		fmt.Println("CLINOTES_API_USERNAME: " + APIUsername)
+	if APIAddress != "" {
+		fmt.Println("CLINOTES_API_USERNAME: " + APIAddress)
 	}
 
 	if APIToken != "" {
