@@ -29,7 +29,7 @@ var addHandler = func(cmd *cobra.Command, args []string) {
 	note := strings.Join(args, " ")
 
 	data := jsonDataAdd{APIAddress, APIToken, note}
-	if _, err := newRequest("/add").post(data); err == nil {
+	if err := newRequest("/add").post(data); err == nil {
 		fmt.Println("Posted")
 	} else {
 		fail("Failed to submit note.")

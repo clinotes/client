@@ -42,7 +42,7 @@ var authHandler = func(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	if _, err := newRequest("/auth").post(jsonData); err == nil {
+	if err := newRequest("/auth").post(jsonData); err == nil {
 		fmt.Println("Token is valid for " + jsonData.Address + "!")
 
 		// Prepare configuration content

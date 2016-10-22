@@ -9,7 +9,7 @@ See the [CLInotes server component](https://github.com/clinotes/server) for more
 #### Homebrew on MacOS
 
 ```bash
-$ > brew tap clinotes/cn git@github.com:clinotes/homebrew-cn.git
+$ > brew tap clinotes/cn
 $ > brew install cn
 ```
 
