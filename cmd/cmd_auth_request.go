@@ -18,7 +18,7 @@ var authRequestHandler = func(cmd *cobra.Command, args []string) {
 	}
 
 	jsonData := jsonDataAuthRequest{authRequestMail}
-	if _, err := newRequest("/auth/token/create").post(jsonData); err == nil {
+	if err := newRequest("/auth/token/create").post(jsonData); err == nil {
 		fmt.Println("Requested a token for " + authRequestMail + "! Please check your mails for your token …")
 	} else {
 		fail("Failed to request token.")
