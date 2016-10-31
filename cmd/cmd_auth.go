@@ -47,7 +47,8 @@ var authHandler = func(cmd *cobra.Command, args []string) {
 
 		// Prepare configuration content
 		config := []byte(fmt.Sprintf(
-			"CLINOTES_API_USERNAME: %s\nCLINOTES_API_TOKEN: %s",
+			"CLINOTES_API_HOSTNAME: %s\nCLINOTES_API_USERNAME: %s\nCLINOTES_API_TOKEN: %s",
+			APIHostname,
 			jsonData.Address,
 			jsonData.Token,
 		))

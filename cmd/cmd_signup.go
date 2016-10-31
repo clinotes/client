@@ -18,7 +18,7 @@ var signupHandler = func(cmd *cobra.Command, args []string) {
 	}
 
 	jsonData := jsonDataSignup{signupMail}
-	if err := newRequest("/auth/user/create").post(jsonData); err == nil {
+	if err := newRequest("/account/create").post(jsonData); err == nil {
 		fmt.Println("Created an account for " + signupMail + "! Please check your mails to verify your account …")
 	} else {
 		fail("Failed to create account.")

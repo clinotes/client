@@ -24,7 +24,7 @@ var signupVerifyHandler = func(cmd *cobra.Command, args []string) {
 	}
 
 	jsonData := jsonDataSignupVerify{signupVerifyMail, signupVerifyToken}
-	if err := newRequest("/auth/user/verify").post(jsonData); err == nil {
+	if err := newRequest("/account/verify").post(jsonData); err == nil {
 		fmt.Println("Verified account for " + signupVerifyMail + "!")
 	} else {
 		fail("Failed to verify account.")
