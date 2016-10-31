@@ -16,8 +16,6 @@ type jsonDataMe struct {
 type jsonDataMeResponse struct {
 	Address      string
 	Created      time.Time
-	Notes        int
-	Token        int
 	Subscription bool
 }
 
@@ -35,14 +33,17 @@ var meHandler = func(cmd *cobra.Command, args []string) {
 
 	data := jsonDataAdd{APIAddress, APIToken, note}
 	var resp jsonDataMeResponse
-	if err := newRequest("/me").postScan(data, &resp); err == nil {
+	if err := newRequest("/account").postScan(data, &resp); err == nil {
+		sub := "No"
+		if resp.Subscription == true {
+			sub = "Yes"
+		}
+
 		fmt.Printf(
-			"\n Account: %s\n Created: %s\n Notes:   %d\n Token:   %d\n\n Subscription: %v\n\n",
+			"\n Account: %s\n Created: %s\n\n Subscription: %v\n\n",
 			resp.Address,
 			resp.Created,
-			resp.Notes,
-			resp.Token,
-			resp.Subscription,
+			sub,
 		)
 	} else {
 		fail("Unable to retrieve account data")
