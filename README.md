@@ -1,10 +1,20 @@
-# CLInotes client [![CircleCI](https://img.shields.io/circleci/project/clinotes/client.svg)](https://circleci.com/gh/clinotes/client/) [![GitHub release](https://img.shields.io/github/release/clinotes/client.svg)](https://github.com/clinotes/client/releases) [![license](https://img.shields.io/github/license/clinotes/client.svg)](https://github.com/clinotes/client/blob/master/LICENSE.md)
+# clinot.es client [![CircleCI](https://circleci.com/gh/clinotes/client.svg?style=svg)](https://circleci.com/gh/clinotes/client)
 
-Use the [CLInotes](https://clinot.es) client application `cn` to create notes from the command line. Per default the command line interface uses the API hosted at [`https://api.clinot.es`](https://api.clinot.es) but you can configure a custom API endpoint within the `~/.clinotes.yaml` configuration file.
+This is a little side-project to learn `Go` and write a command line application using [Cobra](https://github.com/spf13/cobra) with a remote API endpoint deployed using [Heroku](https://heroku.com).
 
-See the [CLInotes server component](https://github.com/clinotes/server) for more information about hosting the API endpoint at your own infrastructure. It works fine at Heroku for example! If you don't want to run your own endpoint, just register for a [free CLInotes account](https://clinot.es) from your command line.
+The [client](https://github.com/clinotes/client) uses the backend at [`api.clinot.es`](https://clinot.es) per default, but you can host the [server](https://github.com/clinotes/server) by yourself, it works fine with Heroku and the default PostgreSQL add-on.
 
-## Instalaltion
+Make sure to set `CLINOTES_API_HOSTNAME` in your environment after setting up a custom endpoint, or just configure your API endpoint within the `~/.clinotes.yaml` configuration file.
+
+## License
+
+Feel free to use the client code, it's released using the [GPLv3 license](https://github.com/clinotes/client/blob/master/LICENSE.md).
+
+## Contributors
+
+- [Sebastian Müller](https://sbstjn.com)
+
+## Install
 
 #### Homebrew on MacOS
 
@@ -29,6 +39,11 @@ $ > brew install cn
 - `signup verify` - Verify created account
 - `version` - Show client version
 
+#### Account
+
+- `me` - Show information for your account
+- `subscribe` - Subscribe account to paid plan
+
 #### Notes
 
 - `add` - Add note - *not available yet*
@@ -41,11 +56,13 @@ $ > brew install cn
 
 #### Create account
 
+Configure `CLINOTES_API_HOSTNAME` if you do not want to use the default API endpoint `https://api.clinot.es` for your requests.
+
 ```bash
 $ > cn signup --mail "mail@example.com"
 ```
 
-You wil receive an email at the provided address with a token to verify you email address.
+You wil receive an email at the provided address with a token to verify your account.
 
 #### Verify account
 
@@ -53,17 +70,17 @@ You wil receive an email at the provided address with a token to verify you emai
 $ > cn signup verify --mail "mail@example.com" --token "leOhEHjDJh"
 ```
 
-Together with the token from the account verification request mail you can now verify that you are the owner of the provided email address.
+Together with the token from the verification request mail you can now verify that you are the owner of the provided email address.
 
-#### Authorization token
+#### Token
 
-You need a valid token to use the [CLInotes](https://clinot.es) command line application. After verifying your account, just request a new authorization token:
+You need a valid token to use the [clinot.es](https://clinot.es) command line application. After verifying your account, just request a new token:
 
 ```bash
 $ > cn auth request --mail "mail@example.com"
 ```
 
-The token will then be delivered right into your mailbox.
+The token will be delivered right into your mailbox again.
 
 #### Authorization
 
@@ -72,11 +89,3 @@ $ > cn auth --mail "mail@example.com" --token "ncMqN4VXSN"
 ```
 
 If the provided token is valid to authorize access to your account, the configuration will be stored in your `~/.clinotes.yaml` file and you are ready to use `cn` for writing notes.
-
-# License
-
-The [CLInotes](https://clinot.es) client is available under [MIT License](https://github.com/clinotes/client/blob/master/LICENSE.md).
-
-# Contributors
-
-- [Sebastian Müller](https://sbstjn.com) **//** [GitHub](https://github.com/sbstjn) - [Twitter](https://twitter.com/sbstjn)
