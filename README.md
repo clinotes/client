@@ -1,8 +1,16 @@
-# CLInotes client [![CircleCI](https://img.shields.io/circleci/project/clinotes/client.svg)](https://circleci.com/gh/clinotes/client/) [![GitHub release](https://img.shields.io/github/release/clinotes/client.svg)](https://github.com/clinotes/client/releases) [![license](https://img.shields.io/github/license/clinotes/client.svg)](https://github.com/clinotes/client/blob/master/LICENSE.md)
+# clinot.es client [![CircleCI](https://img.shields.io/circleci/project/clinotes/client.svg)](https://circleci.com/gh/clinotes/client/) [![GitHub release](https://img.shields.io/github/release/clinotes/client.svg)](https://github.com/clinotes/client/releases) [![license](https://img.shields.io/github/license/clinotes/client.svg)](https://github.com/clinotes/client/blob/master/LICENSE.md)
 
 Use the [CLInotes](https://clinot.es) client application `cn` to create notes from the command line. Per default the command line interface uses the API hosted at [`https://api.clinot.es`](https://api.clinot.es) but you can configure a custom API endpoint within the `~/.clinotes.yaml` configuration file.
 
 See the [CLInotes server component](https://github.com/clinotes/server) for more information about hosting the API endpoint at your own infrastructure. It works fine at Heroku for example! If you don't want to run your own endpoint, just register for a [free CLInotes account](https://clinot.es) from your command line.
+
+## License
+
+Feel free to use the server code, it's released using the [GPLv3 license](https://github.com/clinotes/server/blob/master/LICENSE.md).
+
+## Contributors
+
+- [Sebastian Müller](https://sbstjn.com)
 
 ## Instalaltion
 
@@ -72,11 +80,3 @@ $ > cn auth --mail "mail@example.com" --token "ncMqN4VXSN"
 ```
 
 If the provided token is valid to authorize access to your account, the configuration will be stored in your `~/.clinotes.yaml` file and you are ready to use `cn` for writing notes.
-
-# License
-
-The [CLInotes](https://clinot.es) client is available under [MIT License](https://github.com/clinotes/client/blob/master/LICENSE.md).
-
-# Contributors
-
-- [Sebastian Müller](https://sbstjn.com) **//** [GitHub](https://github.com/sbstjn) - [Twitter](https://twitter.com/sbstjn)
