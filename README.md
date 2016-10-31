@@ -1,4 +1,4 @@
-# clinot.es client [![CircleCI](https://img.shields.io/circleci/project/clinotes/client.svg)](https://circleci.com/gh/clinotes/client/) [![GitHub release](https://img.shields.io/github/release/clinotes/client.svg)](https://github.com/clinotes/client/releases) [![license](https://img.shields.io/github/license/clinotes/client.svg)](https://github.com/clinotes/client/blob/master/LICENSE.md)
+# clinot.es client [![CircleCI](https://circleci.com/gh/clinotes/client.svg?style=svg)](https://circleci.com/gh/clinotes/client)
 
 This is a little side-project to learn `Go` and write a command line application using [Cobra](https://github.com/spf13/cobra) with a remote API endpoint deployed using [Heroku](https://heroku.com).
 
