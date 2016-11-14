@@ -19,7 +19,6 @@
 package cmd
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -48,9 +47,9 @@ var addHandler = func(cmd *cobra.Command, args []string) {
 
 	data := jsonDataAdd{APIAddress, APIToken, note}
 	if err := newRequest("/add").post(data); err == nil {
-		fmt.Println("Posted")
+		doneNice("Done")
 	} else {
-		fail("Failed to submit note.")
+		failNice("Fail")
 	}
 }
 

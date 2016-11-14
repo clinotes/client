@@ -18,11 +18,7 @@
 
 package cmd
 
-import (
-	"fmt"
-
-	"github.com/spf13/cobra"
-)
+import "github.com/spf13/cobra"
 
 var authRequestMail string
 
@@ -37,9 +33,9 @@ var authRequestHandler = func(cmd *cobra.Command, args []string) {
 
 	jsonData := jsonDataAuthRequest{authRequestMail}
 	if err := newRequest("/token/create").post(jsonData); err == nil {
-		fmt.Println("Requested a token for " + authRequestMail + "! Please check your mails for your token …")
+		doneNice("Requested a token for " + authRequestMail + "! Please check your mails for your token …")
 	} else {
-		fail("Failed to request token.")
+		failNice("Failed to request token.")
 	}
 }
 

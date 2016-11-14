@@ -18,11 +18,7 @@
 
 package cmd
 
-import (
-	"fmt"
-
-	"github.com/spf13/cobra"
-)
+import "github.com/spf13/cobra"
 
 var signupVerifyToken string
 var signupVerifyMail string
@@ -34,18 +30,18 @@ type jsonDataSignupVerify struct {
 
 var signupVerifyHandler = func(cmd *cobra.Command, args []string) {
 	if signupVerifyToken == "" {
-		fail(`Missing token. Use "--token" or see "--help"`)
+		failNice(`Missing token. Use "--token" or see "--help"`)
 	}
 
 	if signupVerifyMail == "" {
-		fail(`Missing email address. Use "--mail" or see "--help"`)
+		failNice(`Missing email address. Use "--mail" or see "--help"`)
 	}
 
 	jsonData := jsonDataSignupVerify{signupVerifyMail, signupVerifyToken}
 	if err := newRequest("/account/verify").post(jsonData); err == nil {
-		fmt.Println("Verified account for " + signupVerifyMail + "!")
+		doneNice("Verified account for " + signupVerifyMail + "!")
 	} else {
-		fail("Failed to verify account.")
+		failNice("Failed to verify account.")
 	}
 }
 

@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -56,6 +57,15 @@ func ensureCredentials() {
 	if APIAddress == "" || APIToken == "" {
 		fail("No credentials found!\n\nSee `cn --help` or visit https://clinot.es to read more …")
 	}
+}
+
+func doneNice(message string) {
+	fmt.Fprintf(os.Stderr, " %s "+message+"\n", color.New(color.FgGreen).SprintFunc()("✓"))
+}
+
+func failNice(message string) {
+	fmt.Fprintf(os.Stderr, " %s "+message+"\n", color.New(color.FgRed).SprintFunc()("✘"))
+	os.Exit(1)
 }
 
 func fail(format string, a ...interface{}) {
