@@ -43,7 +43,7 @@ var meHandler = func(cmd *cobra.Command, args []string) {
 
 	// Make sure nobody uses --start and --stop at the same time
 	if addStart == true && addStop == true {
-		fail(`Use "--start" OR "--stop" but not both!`)
+		failNice(`Use "--start" OR "--stop" but not both!`)
 	}
 
 	// Read note message from arguments
@@ -64,7 +64,7 @@ var meHandler = func(cmd *cobra.Command, args []string) {
 			sub,
 		)
 	} else {
-		fail("Unable to retrieve account data")
+		failNice("Unable to retrieve account data")
 	}
 }
 

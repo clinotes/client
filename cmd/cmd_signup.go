@@ -21,6 +21,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -32,14 +33,18 @@ type jsonDataSignup struct {
 
 var signupHandler = func(cmd *cobra.Command, args []string) {
 	if signupMail == "" {
-		fail(`Missing email address. Use "--mail" or see "--help"`)
+		failNice(`Missing email address. Use "--mail" or see "--help"`)
 	}
 
 	jsonData := jsonDataSignup{signupMail}
 	if err := newRequest("/account/create").post(jsonData); err == nil {
-		fmt.Println("Created an account for " + signupMail + "! Please check your mails to verify your account …")
+		fmt.Printf(
+			" %s Created an account for %s! Please check your mails to verify your account …\n",
+			color.New(color.FgGreen).SprintFunc()("✓"),
+			signupMail,
+		)
 	} else {
-		fail("Failed to create account.")
+		failNice("Failed to create account.")
 	}
 }
 
