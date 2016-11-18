@@ -21,11 +21,9 @@ package cmd
 import (
 	"strings"
 
+	fb "github.com/sbstjn/feedback"
 	"github.com/spf13/cobra"
 )
-
-var addStart bool
-var addStop bool
 
 type jsonDataAdd struct {
 	Address string
@@ -33,35 +31,24 @@ type jsonDataAdd struct {
 	Note    string
 }
 
-var addHandler = func(cmd *cobra.Command, args []string) {
-	// Fail of either APIAddress or APIToken is missing
+func addHandler(cmd *cobra.Command, args []string) {
+	// Fail when APIAddress or APIToken is missing
 	ensureCredentials()
 
-	// Make sure nobody uses --start and --stop at the same time
-	if addStart == true && addStop == true {
-		fail(`Use "--start" OR "--stop" but not both!`)
-	}
-
-	// Read note message from arguments
 	note := strings.Join(args, " ")
-
 	data := jsonDataAdd{APIAddress, APIToken, note}
-	if err := newRequest("/add").post(data); err == nil {
-		doneNice("Done")
-	} else {
-		failNice("Fail")
-	}
-}
 
-var addCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Add a note",
-	Run:   addHandler,
+	if err := newRequest("/add").post(data); err != nil {
+		fb.Fail("Fail")
+	}
+
+	fb.Done("Done")
 }
 
 func init() {
-	addCmd.Flags().BoolVar(&addStart, "start", false, "start counter")
-	addCmd.Flags().BoolVar(&addStop, "stop", false, "stop counter")
-
-	RootCmd.AddCommand(addCmd)
+	RootCmd.AddCommand(&cobra.Command{
+		Use:   "add",
+		Short: "Add a note",
+		Run:   addHandler,
+	})
 }

@@ -20,9 +20,9 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
+	fb "github.com/sbstjn/feedback"
 	"github.com/spf13/cobra"
 )
 
@@ -37,19 +37,11 @@ type jsonDataMeResponse struct {
 	Subscription bool
 }
 
-var meHandler = func(cmd *cobra.Command, args []string) {
+func meHandler(cmd *cobra.Command, args []string) {
 	// Fail of either APIAddress or APIToken is missing
 	ensureCredentials()
 
-	// Make sure nobody uses --start and --stop at the same time
-	if addStart == true && addStop == true {
-		failNice(`Use "--start" OR "--stop" but not both!`)
-	}
-
-	// Read note message from arguments
-	note := strings.Join(args, " ")
-
-	data := jsonDataAdd{APIAddress, APIToken, note}
+	data := jsonDataMe{APIAddress, APIToken}
 	var resp jsonDataMeResponse
 	if err := newRequest("/account").postScan(data, &resp); err == nil {
 		sub := "No"
@@ -64,17 +56,14 @@ var meHandler = func(cmd *cobra.Command, args []string) {
 			sub,
 		)
 	} else {
-		failNice("Unable to retrieve account data")
+		fb.Fail("Unable to retrieve account data")
 	}
 }
 
-var meCmd = &cobra.Command{
-	Use:   "me",
-	Short: "Show account information",
-	Run:   meHandler,
-}
-
 func init() {
-
-	RootCmd.AddCommand(meCmd)
+	RootCmd.AddCommand(&cobra.Command{
+		Use:   "me",
+		Short: "Show account information",
+		Run:   meHandler,
+	})
 }

@@ -19,43 +19,35 @@
 package cmd
 
 import (
-	"fmt"
+	"strings"
 
-	"github.com/fatih/color"
+	fb "github.com/sbstjn/feedback"
 	"github.com/spf13/cobra"
 )
-
-var signupMail string
 
 type jsonDataSignup struct {
 	Address string
 }
 
-var signupHandler = func(cmd *cobra.Command, args []string) {
-	if signupMail == "" {
-		failNice(`Missing email address. Use "--mail" or see "--help"`)
+func signupHandler(cmd *cobra.Command, args []string) {
+	if len(args) != 1 || args[0] == "" || !strings.Contains(args[0], "@") {
+		fb.Fail("Invalid email address. Use `cn signup mail@example.com`")
 	}
 
-	jsonData := jsonDataSignup{signupMail}
+	jsonData := jsonDataSignup{args[0]}
 	if err := newRequest("/account/create").post(jsonData); err == nil {
-		fmt.Printf(
-			" %s Created an account for %s! Please check your mails to verify your account …\n",
-			color.New(color.FgGreen).SprintFunc()("✓"),
-			signupMail,
-		)
+		fb.Done("A verification token will be delivered to your inbox!")
+		verifyAccount(args[0], fb.Ask("Please enter your token:"))
+		requestToken(args[0])
 	} else {
-		failNice("Failed to create account.")
+		fb.Fail("Failed to create account!")
 	}
-}
-
-var signupCmd = &cobra.Command{
-	Use:   "signup",
-	Short: "Sign up for a clinot.es account",
-	Run:   signupHandler,
 }
 
 func init() {
-	signupCmd.Flags().StringVar(&signupMail, "mail", "", "mail address")
-
-	RootCmd.AddCommand(signupCmd)
+	RootCmd.AddCommand(&cobra.Command{
+		Use:   "signup",
+		Short: "Sign up for a clinot.es account",
+		Run:   signupHandler,
+	})
 }

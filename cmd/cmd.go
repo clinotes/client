@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/fatih/color"
+	fb "github.com/sbstjn/feedback"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -49,28 +49,14 @@ type APIErrorResponse struct {
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:   "clinotes",
+	Use:   "cn",
 	Short: "Access clinot.es from the command line",
 }
 
 func ensureCredentials() {
 	if APIAddress == "" || APIToken == "" {
-		fail("No credentials found!\n\nSee `cn --help` or visit https://clinot.es to read more …")
+		fb.Fail("No credentials found! Use `cn auth` first …")
 	}
-}
-
-func doneNice(message string) {
-	fmt.Fprintf(os.Stderr, " %s "+message+"\n", color.New(color.FgGreen).SprintFunc()("✓"))
-}
-
-func failNice(message string) {
-	fmt.Fprintf(os.Stderr, " %s "+message+"\n", color.New(color.FgRed).SprintFunc()("✘"))
-	os.Exit(1)
-}
-
-func fail(format string, a ...interface{}) {
-	fmt.Fprintf(os.Stderr, "error: "+format+"\n", a...)
-	os.Exit(1)
 }
 
 // Execute adds all child commands to the root command
@@ -97,4 +83,8 @@ func initConfig() {
 	APIHostname = viper.GetString("CLINOTES_API_HOSTNAME")
 	APIAddress = viper.GetString("CLINOTES_API_USERNAME")
 	APIToken = viper.GetString("CLINOTES_API_TOKEN")
+
+	if APIHostname == "" {
+		APIHostname = FallbackHostname
+	}
 }

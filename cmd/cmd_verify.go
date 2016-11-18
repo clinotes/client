@@ -18,42 +18,44 @@
 
 package cmd
 
-import "github.com/spf13/cobra"
-
-var signupVerifyToken string
-var signupVerifyMail string
+import (
+	fb "github.com/sbstjn/feedback"
+	"github.com/spf13/cobra"
+)
 
 type jsonDataSignupVerify struct {
 	Address string
 	Token   string
 }
 
-var signupVerifyHandler = func(cmd *cobra.Command, args []string) {
-	if signupVerifyToken == "" {
-		failNice(`Missing token. Use "--token" or see "--help"`)
+func verifyAccount(address string, token string) {
+	if address == "" || token == "" {
+		fb.Fail("Invalid parameter. Use `cn verify mail@example.com YourToken`")
 	}
 
-	if signupVerifyMail == "" {
-		failNice(`Missing email address. Use "--mail" or see "--help"`)
-	}
-
-	jsonData := jsonDataSignupVerify{signupVerifyMail, signupVerifyToken}
+	jsonData := jsonDataSignupVerify{address, token}
 	if err := newRequest("/account/verify").post(jsonData); err == nil {
-		doneNice("Verified account for " + signupVerifyMail + "!")
+		fb.Done("Account verified!")
 	} else {
-		failNice("Failed to verify account.")
+		fb.Fail("Failed to verify account!")
 	}
 }
 
-var signupVerifyCmd = &cobra.Command{
-	Use:   "verify",
-	Short: "Verify a new clinot.es account",
-	Run:   signupVerifyHandler,
+func signupVerifyHandler(cmd *cobra.Command, args []string) {
+	switch len(args) {
+	case 1:
+		verifyAccount(args[0], fb.Ask("Please enter your token:"))
+	case 2:
+		verifyAccount(args[0], args[1])
+	default:
+		fb.Fail("Invalid parameter. Use `cn verify mail@example.com [YourToken]`")
+	}
 }
 
 func init() {
-	signupVerifyCmd.Flags().StringVar(&signupVerifyToken, "token", "", "token for account verification")
-	signupVerifyCmd.Flags().StringVar(&signupVerifyMail, "mail", "", "mail for account verification")
-
-	signupCmd.AddCommand(signupVerifyCmd)
+	RootCmd.AddCommand(&cobra.Command{
+		Use:   "verify",
+		Short: "Verify a new clinot.es account",
+		Run:   signupVerifyHandler,
+	})
 }
