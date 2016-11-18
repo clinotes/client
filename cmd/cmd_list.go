@@ -19,39 +19,41 @@
 package cmd
 
 import (
-	"strings"
+	"time"
 
 	fb "github.com/sbstjn/feedback"
 	"github.com/spf13/cobra"
 )
 
-type jsonDataAdd struct {
+type jsonDataList struct {
 	Address string
 	Token   string
-	Note    string
 }
 
-func addHandler(cmd *cobra.Command, args []string) {
+type jsonDataListItemResponse struct {
+	Text    string
+	Created time.Time
+}
+
+func listHandler(cmd *cobra.Command, args []string) {
 	// Fail when APIAddress or APIToken is missing
 	ensureCredentials()
 
-	note := strings.Join(args, " ")
-	if len(note) > 100 {
-		fb.Fail("Note must not be longer than 100 characters!")
+	data := jsonDataList{APIAddress, APIToken}
+	var resp []jsonDataListItemResponse
+	if err := newRequest("/notes").postScan(data, &resp); err != nil {
+		fb.Fail("Unable to retrieve notes")
 	}
 
-	data := jsonDataAdd{APIAddress, APIToken, note}
-	if err := newRequest("/add").post(data); err != nil {
-		fb.Fail("Fail")
+	for i := 0; i < len(resp); i++ {
+		fb.Info(resp[i].Created.Format("[15:04:05]") + " " + resp[i].Text)
 	}
-
-	fb.Done("Done")
 }
 
 func init() {
 	RootCmd.AddCommand(&cobra.Command{
-		Use:   "add",
-		Short: "Add a note",
-		Run:   addHandler,
+		Use:   "list",
+		Short: "List  notes",
+		Run:   listHandler,
 	})
 }

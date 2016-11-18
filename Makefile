@@ -1,4 +1,4 @@
-VERSION=0.2.0
+VERSION=0.2.1
 PATH_BUILD=build/
 S3_BUCKET_NAME=dl.clinot.es
 
