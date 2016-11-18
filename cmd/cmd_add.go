@@ -36,8 +36,11 @@ func addHandler(cmd *cobra.Command, args []string) {
 	ensureCredentials()
 
 	note := strings.Join(args, " ")
-	data := jsonDataAdd{APIAddress, APIToken, note}
+	if len(note) > 100 {
+		fb.Fail("Note must not be longer than 100 characters!")
+	}
 
+	data := jsonDataAdd{APIAddress, APIToken, note}
 	if err := newRequest("/add").post(data); err != nil {
 		fb.Fail("Fail")
 	}
