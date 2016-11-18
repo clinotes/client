@@ -94,6 +94,10 @@
 			"Rev": "a71e8f580e3b622ebff585309160b1cc549ef4d2"
 		},
 		{
+			"ImportPath": "github.com/sbstjn/feedback",
+			"Rev": "ab5622bfabeccd8bf31a0b7b470c03bf9df7eab8"
+		},
+		{
 			"ImportPath": "github.com/spf13/afero",
 			"Rev": "20500e2abd0d1f4564a499e83d11d6c73cd58c27"
 		},
